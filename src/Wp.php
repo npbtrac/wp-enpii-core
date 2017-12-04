@@ -18,12 +18,11 @@ class Wp {
 	 *
 	 * @return mixed
 	 */
-	public static function get_option($name, $default = null)
-	{
-		if (get_field($name, 'option')) {
-			return get_field($name, 'option');
-		} else if (defined('ICL_LANGUAGE_CODE') && get_field($name . '_' . ICL_LANGUAGE_CODE, 'option')) {
-			return get_field($name . '_' . ICL_LANGUAGE_CODE, 'option');
+	public static function get_option( $name, $default = null ) {
+		if ( get_field( $name, 'option' ) ) {
+			return get_field( $name, 'option' );
+		} else if ( defined( 'ICL_LANGUAGE_CODE' ) && get_field( $name . '_' . ICL_LANGUAGE_CODE, 'option' ) ) {
+			return get_field( $name . '_' . ICL_LANGUAGE_CODE, 'option' );
 		} else {
 			return $default;
 		}
@@ -38,15 +37,79 @@ class Wp {
 	 *
 	 * @return null
 	 */
-	public static function get_option_data($name, $data, $default = null)
-	{
-		if (!empty($data[$name])) {
-			return $data[$name];
-		} else if (defined('ICL_LANGUAGE_CODE') && !empty($data[$name . '_' . ICL_LANGUAGE_CODE])) {
-			return $data[$name . '_' . ICL_LANGUAGE_CODE];
+	public static function get_option_data( $name, $data, $default = null ) {
+		if ( ! empty( $data[ $name ] ) ) {
+			return $data[ $name ];
+		} else if ( defined( 'ICL_LANGUAGE_CODE' ) && ! empty( $data[ $name . '_' . ICL_LANGUAGE_CODE ] ) ) {
+			return $data[ $name . '_' . ICL_LANGUAGE_CODE ];
 		} else {
 			return $default;
 		}
+	}
+
+	/**
+	 * Get content of a template block for the layout with params
+	 * Template file should be in `templates` folder of child theme, parent theme or of this plugin
+	 *
+	 * @param string $template_name name of the template
+	 * @param array $params arguments needed to be sent to the view
+	 *
+	 * @return string
+	 * @throws \Exception
+	 */
+	public static function get_template_block( $template_name, $params = array() ) {
+		global $wp_query;
+
+		extract( $params );
+		$template_default_path     = _NP_ENPII_PATH . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $template_name . '.php';
+		$template_theme_path       = get_template_directory() . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $template_name . '.php';
+		$template_child_theme_path = get_stylesheet_directory() . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $template_name . '.php';
+
+		ob_start();
+		if ( file_exists( $template_child_theme_path ) ) {
+			include $template_child_theme_path;
+		} else if ( file_exists( $template_theme_path ) ) {
+			include $template_theme_path;
+		} else if ( file_exists( $template_default_path ) ) {
+			include( $template_default_path );
+		} else {
+			throw new \Exception( 'Error: Template ' . $template_name . ' Not Found.' );
+		}
+		$result = ob_get_contents();
+		ob_end_clean();
+
+		return $result;
+
+	}
+
+	/**
+	 * Load Bootstrap 3 JS
+	 */
+	public static function use_boostrap3_js() {
+		wp_enqueue_script( 'bootstrap3-js', _NP_ASSETS_URL . '/bootstrap/dist/js/bootstrap.min.js', array( 'jquery' ), _NP_PLUGIN_VER, true );
+	}
+
+	/**
+	 * Load Font Awesome
+	 */
+	public static function use_font_awesome() {
+		wp_enqueue_style('font-awesome', _NP_ASSETS_URL . '/font-awesome/css/font-awesome.min.css', array(), _NP_PLUGIN_VER, true);
+	}
+
+	/**
+	 * Load BxSlider assets
+	 */
+	public static function use_bx_slider() {
+		wp_enqueue_style('bx-slider', _NP_ASSETS_URL . '/bxslider-4/dist/jquery.bxslider.css', array(), _NP_PLUGIN_VER, 'all');
+		wp_enqueue_script('bx-slider', _NP_ASSETS_URL . '/bxslider-4/dist/jquery.bxslider.min.js', array('jquery'), _NP_PLUGIN_VER, true);
+	}
+
+	/**
+	 * Load Slick Carousel assets
+	 */
+	public static function use_slick_carousel() {
+		wp_enqueue_style('slick-carousel', _NP_ASSETS_URL . '/slick-carousel/slick/slick.css', array(), _NP_PLUGIN_VER, 'all');
+		wp_enqueue_script('slick-carousel', _NP_ASSETS_URL . '/slick-carousel/slick/slick.min.js', array(), _NP_PLUGIN_VER, true);
 	}
 
 	/**
@@ -123,24 +186,6 @@ class Wp {
 				),
 			));
 		}
-	}
-
-	public static function use_boostrap3_js() {
-		wp_enqueue_script( 'bootstrap3-js', _NP_ASSETS_URL . '/bootstrap/dist/js/bootstrap.min.js', array( 'jquery' ), _NP_PLUGIN_VER, true );
-	}
-
-	public static function use_font_awesome() {
-		wp_enqueue_style('font-awesome', _NP_ASSETS_URL . '/font-awesome/css/font-awesome.min.css', array(), _NP_PLUGIN_VER, true);
-	}
-
-	public static function use_bx_slider() {
-		wp_enqueue_style('bx-slider', _NP_ASSETS_URL . '/bxslider-4/dist/jquery.bxslider.css', array(), _NP_PLUGIN_VER, 'all');
-		wp_enqueue_script('bx-slider', _NP_ASSETS_URL . '/bxslider-4/dist/jquery.bxslider.min.js', array('jquery'), _NP_PLUGIN_VER, true);
-	}
-
-	public static function use_slick_carousel() {
-		wp_enqueue_style('slick-carousel', _NP_ASSETS_URL . '/slick-carousel/slick/slick.css', array(), _NP_PLUGIN_VER, 'all');
-		wp_enqueue_script('slick-carousel', _NP_ASSETS_URL . '/slick-carousel/slick/slick.min.js', array(), _NP_PLUGIN_VER, true);
 	}
 
 	public static function useAddOn($libs = array())
