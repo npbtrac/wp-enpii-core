@@ -138,6 +138,11 @@ class Wp {
 		wp_enqueue_script('bx-slider', _NP_ASSETS_URL . '/bxslider-4/dist/jquery.bxslider.min.js', array('jquery'), _NP_PLUGIN_VER, true);
 	}
 
+	public static function use_slick_carousel() {
+		wp_enqueue_style('slick-carousel', _NP_ASSETS_URL . '/slick-carousel/slick/slick.css', array(), _NP_PLUGIN_VER, 'all');
+		wp_enqueue_script('slick-carousel', _NP_ASSETS_URL . '/slick-carousel/slick/slick.min.js', array(), _NP_PLUGIN_VER, true);
+	}
+
 	public static function useAddOn($libs = array())
 	{
 		$default = array(
