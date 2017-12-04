@@ -2,13 +2,12 @@
 /**
  * Created by PhpStorm.
  * Author: npbtrac@yahoo.com
- * Date time: 12/1/17 2:07 PM
+ * Date time: 12/3/17 11:31 AM
  */
 
 namespace Enpii\WpEnpiiCore;
 
-
-class BoostStrapNavWalker extends \Walker_Nav_Menu
+class BootstrapNavWalker extends \Walker_Nav_Menu
 {
 
 	/**

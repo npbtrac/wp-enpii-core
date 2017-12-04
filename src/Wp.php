@@ -9,6 +9,46 @@ namespace Enpii\WpEnpiiCore;
 
 
 class Wp {
+
+	/**
+	 * Get option from ACF option, with WPML supported
+	 *
+	 * @param string $name
+	 * @param string $default
+	 *
+	 * @return mixed
+	 */
+	public static function get_option($name, $default = null)
+	{
+		if (get_field($name, 'option')) {
+			return get_field($name, 'option');
+		} else if (defined('ICL_LANGUAGE_CODE') && get_field($name . '_' . ICL_LANGUAGE_CODE, 'option')) {
+			return get_field($name . '_' . ICL_LANGUAGE_CODE, 'option');
+		} else {
+			return $default;
+		}
+	}
+
+	/**
+	 * Get option value from a data given
+	 *
+	 * @param string $name name of the option to get
+	 * @param mixed $data data given for getting option
+	 * @param null $default default value
+	 *
+	 * @return null
+	 */
+	public static function get_option_data($name, $data, $default = null)
+	{
+		if (!empty($data[$name])) {
+			return $data[$name];
+		} else if (defined('ICL_LANGUAGE_CODE') && !empty($data[$name . '_' . ICL_LANGUAGE_CODE])) {
+			return $data[$name . '_' . ICL_LANGUAGE_CODE];
+		} else {
+			return $default;
+		}
+	}
+
 	/**
 	 * @param $postType string, name of the post type to be registered with WP
 	 * @param $slug string, slug of the post type
@@ -83,6 +123,19 @@ class Wp {
 				),
 			));
 		}
+	}
+
+	public static function use_boostrap3_js() {
+		wp_enqueue_script( 'bootstrap3-js', _NP_ASSETS_URL . '/bootstrap/dist/js/bootstrap.min.js', array( 'jquery' ), _NP_PLUGIN_VER, true );
+	}
+
+	public static function use_font_awesome() {
+		wp_enqueue_style('font-awesome', _NP_ASSETS_URL . '/font-awesome/css/font-awesome.min.css', array(), _NP_PLUGIN_VER, true);
+	}
+
+	public static function use_bx_slider() {
+		wp_enqueue_style('bx-slider', _NP_ASSETS_URL . '/bxslider-4/dist/jquery.bxslider.css', array(), _NP_PLUGIN_VER, 'all');
+		wp_enqueue_script('bx-slider', _NP_ASSETS_URL . '/bxslider-4/dist/jquery.bxslider.min.js', array('jquery'), _NP_PLUGIN_VER, true);
 	}
 
 	public static function useAddOn($libs = array())

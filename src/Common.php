@@ -26,45 +26,6 @@ class Common {
 	}
 
 	/**
-	 * Get option from ACF option, with WPML supported
-	 *
-	 * @param string $name
-	 * @param string $default
-	 *
-	 * @return mixed
-	 */
-	public static function get_option($name, $default = null)
-	{
-		if (get_field($name, 'option')) {
-			return get_field($name, 'option');
-		} else if (defined('ICL_LANGUAGE_CODE') && get_field($name . '_' . ICL_LANGUAGE_CODE, 'option')) {
-			return get_field($name . '_' . ICL_LANGUAGE_CODE, 'option');
-		} else {
-			return $default;
-		}
-	}
-
-	/**
-	 * Get option value from a data given
-	 *
-	 * @param string $name name of the option to get
-	 * @param mixed $data data given for getting option
-	 * @param null $default default value
-	 *
-	 * @return null
-	 */
-	public static function get_option_data($name, $data, $default = null)
-	{
-		if (!empty($data[$name])) {
-			return $data[$name];
-		} else if (defined('ICL_LANGUAGE_CODE') && !empty($data[$name . '_' . ICL_LANGUAGE_CODE])) {
-			return $data[$name . '_' . ICL_LANGUAGE_CODE];
-		} else {
-			return $default;
-		}
-	}
-
-	/**
 	 * Get a substring from beginning to a position without space, tab ...
 	 * @param $str
 	 * @param $end
