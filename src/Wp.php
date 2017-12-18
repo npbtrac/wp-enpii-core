@@ -61,7 +61,7 @@ class Wp {
 		global $wp_query;
 
 		extract( $params );
-		$template_default_path     = _NP_ENPII_PATH . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $template_name . '.php';
+		$template_default_path     = NP_ENPII_PATH . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $template_name . '.php';
 		$template_theme_path       = get_template_directory() . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $template_name . '.php';
 		$template_child_theme_path = get_stylesheet_directory() . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $template_name . '.php';
 
@@ -86,30 +86,30 @@ class Wp {
 	 * Load Bootstrap 3 JS
 	 */
 	public static function use_boostrap3_js() {
-		wp_enqueue_script( 'bootstrap3-js', _NP_ASSETS_URL . '/bootstrap/dist/js/bootstrap.min.js', array( 'jquery' ), _NP_PLUGIN_VER, true );
+		wp_enqueue_script( 'bootstrap3-js', NP_ASSETS_URL . '/bootstrap/dist/js/bootstrap.min.js', array( 'jquery' ), NP_PLUGIN_CORE_VER, true );
 	}
 
 	/**
 	 * Load Font Awesome
 	 */
 	public static function use_font_awesome() {
-		wp_enqueue_style('font-awesome', _NP_ASSETS_URL . '/font-awesome/css/font-awesome.min.css', array(), _NP_PLUGIN_VER, true);
+		wp_enqueue_style('font-awesome', NP_ASSETS_URL . '/font-awesome/css/font-awesome.min.css', array(), NP_PLUGIN_CORE_VER, true);
 	}
 
 	/**
 	 * Load BxSlider assets
 	 */
 	public static function use_bx_slider() {
-		wp_enqueue_style('bx-slider', _NP_ASSETS_URL . '/bxslider-4/dist/jquery.bxslider.css', array(), _NP_PLUGIN_VER, 'all');
-		wp_enqueue_script('bx-slider', _NP_ASSETS_URL . '/bxslider-4/dist/jquery.bxslider.min.js', array('jquery'), _NP_PLUGIN_VER, true);
+		wp_enqueue_style('bx-slider', NP_ASSETS_URL . '/bxslider-4/dist/jquery.bxslider.css', array(), NP_PLUGIN_CORE_VER, 'all');
+		wp_enqueue_script('bx-slider', NP_ASSETS_URL . '/bxslider-4/dist/jquery.bxslider.min.js', array('jquery'), NP_PLUGIN_CORE_VER, true);
 	}
 
 	/**
 	 * Load Slick Carousel assets
 	 */
 	public static function use_slick_carousel() {
-		wp_enqueue_style('slick-carousel', _NP_ASSETS_URL . '/slick-carousel/slick/slick.css', array(), _NP_PLUGIN_VER, 'all');
-		wp_enqueue_script('slick-carousel', _NP_ASSETS_URL . '/slick-carousel/slick/slick.min.js', array(), _NP_PLUGIN_VER, true);
+		wp_enqueue_style('slick-carousel', NP_ASSETS_URL . '/slick-carousel/slick/slick.css', array(), NP_PLUGIN_CORE_VER, 'all');
+		wp_enqueue_script('slick-carousel', NP_ASSETS_URL . '/slick-carousel/slick/slick.min.js', array(), NP_PLUGIN_CORE_VER, true);
 	}
 
 	/**
@@ -123,20 +123,20 @@ class Wp {
 	{
 		if (!empty($postType)) {
 			$labels = array(
-				'name' => _x($pluralName, 'post type general name', _NP_TEXT_DOMAIN),
-				'singular_name' => _x($singularName, 'post type singular name', _NP_TEXT_DOMAIN),
-				'menu_name' => _x($pluralName, 'admin menu', _NP_TEXT_DOMAIN),
-				'name_admin_bar' => _x($singularName, 'add new on admin bar', _NP_TEXT_DOMAIN),
-				'add_new' => _x(sprintf('Add New %s', $singularName), _NP_TEXT_DOMAIN),
-				'add_new_item' => __(sprintf('Add New %s', $singularName), _NP_TEXT_DOMAIN),
-				'new_item' => __(sprintf('New %s', $singularName), _NP_TEXT_DOMAIN),
-				'edit_item' => __(sprintf('Edit %s', $singularName), _NP_TEXT_DOMAIN),
-				'view_item' => __(sprintf('View %s', $singularName), _NP_TEXT_DOMAIN),
-				'all_items' => __(sprintf('All %s', $pluralName), _NP_TEXT_DOMAIN),
-				'search_items' => __(sprintf('Search %s', $pluralName), _NP_TEXT_DOMAIN),
-				'parent_item_colon' => __(sprintf('Parent %s :', $singularName), _NP_TEXT_DOMAIN),
-				'not_found' => __(sprintf('No %s found', $pluralName), _NP_TEXT_DOMAIN),
-				'not_found_in_trash' => __(sprintf('No %s found in Trash.', $pluralName), _NP_TEXT_DOMAIN)
+				'name' => _x($pluralName, 'post type general name', NP_TEXT_DOMAIN),
+				'singular_name' => _x($singularName, 'post type singular name', NP_TEXT_DOMAIN),
+				'menu_name' => _x($pluralName, 'admin menu', NP_TEXT_DOMAIN),
+				'name_admin_bar' => _x($singularName, 'add new on admin bar', NP_TEXT_DOMAIN),
+				'add_new' => _x(sprintf('Add New %s', $singularName), NP_TEXT_DOMAIN),
+				'add_new_item' => __(sprintf('Add New %s', $singularName), NP_TEXT_DOMAIN),
+				'new_item' => __(sprintf('New %s', $singularName), NP_TEXT_DOMAIN),
+				'edit_item' => __(sprintf('Edit %s', $singularName), NP_TEXT_DOMAIN),
+				'view_item' => __(sprintf('View %s', $singularName), NP_TEXT_DOMAIN),
+				'all_items' => __(sprintf('All %s', $pluralName), NP_TEXT_DOMAIN),
+				'search_items' => __(sprintf('Search %s', $pluralName), NP_TEXT_DOMAIN),
+				'parent_item_colon' => __(sprintf('Parent %s :', $singularName), NP_TEXT_DOMAIN),
+				'not_found' => __(sprintf('No %s found', $pluralName), NP_TEXT_DOMAIN),
+				'not_found_in_trash' => __(sprintf('No %s found in Trash.', $pluralName), NP_TEXT_DOMAIN)
 			);
 
 			$args = array(
@@ -207,37 +207,37 @@ class Wp {
 		foreach ($libs as $item) {
 			switch ($item) {
 				case 'bootstrap-js':
-					wp_enqueue_script('bootstrap-js', _NP_ASSETS_URL . '/bootstrap/dist/js/bootstrap.min.js', array(), _NP_PLUGIN_VER, true);
+					wp_enqueue_script('bootstrap-js', NP_ASSETS_URL . '/bootstrap/dist/js/bootstrap.min.js', array(), NP_PLUGIN_CORE_VER, true);
 					break;
 				case 'bx-slider' :
-					wp_enqueue_style('bx-slider-css', _NP_ASSETS_URL . '/bxslider-4/dist/jquery.bxslider.css', array(), _NP_PLUGIN_VER, true);
-					wp_enqueue_script('bx-slider-js', _NP_ASSETS_URL . '/bxslider-4/dist/jquery.bxslider.min.js', array(), _NP_PLUGIN_VER, true);
-					wp_enqueue_script('main-slider', _NP_ASSETS_URL . '/bxslider-4/dist/jquery.bxslider.min.js', array(), _NP_PLUGIN_VER, true);
+					wp_enqueue_style('bx-slider-css', NP_ASSETS_URL . '/bxslider-4/dist/jquery.bxslider.css', array(), NP_PLUGIN_CORE_VER, true);
+					wp_enqueue_script('bx-slider-js', NP_ASSETS_URL . '/bxslider-4/dist/jquery.bxslider.min.js', array(), NP_PLUGIN_CORE_VER, true);
+					wp_enqueue_script('main-slider', NP_ASSETS_URL . '/bxslider-4/dist/jquery.bxslider.min.js', array(), NP_PLUGIN_CORE_VER, true);
 					break;
 				case 'detect-izr' :
-					wp_enqueue_script('detect-izr', _NP_ASSETS_URL . '/detectizr/dist/detectizr.min.js', array(), _NP_PLUGIN_VER, true);
+					wp_enqueue_script('detect-izr', NP_ASSETS_URL . '/detectizr/dist/detectizr.min.js', array(), NP_PLUGIN_CORE_VER, true);
 					break;
 				case 'modern-izr' :
-					wp_enqueue_script('modern-izr', _NP_ASSETS_URL . '/modernizr/modernizr.min.js', array(), _NP_PLUGIN_VER, true);
+					wp_enqueue_script('modern-izr', NP_ASSETS_URL . '/modernizr/modernizr.min.js', array(), NP_PLUGIN_CORE_VER, true);
 					break;
 				case 'font-awesome':
-					wp_enqueue_style('font-awesome', _NP_ASSETS_URL . '/font-awesome/css/font-awesome.min.css', array(), _NP_PLUGIN_VER, true);
+					wp_enqueue_style('font-awesome', NP_ASSETS_URL . '/font-awesome/css/font-awesome.min.css', array(), NP_PLUGIN_CORE_VER, true);
 					break;
 				case 'color-box':
-					wp_enqueue_style('jquery-colorbox-css', _NP_ASSETS_URL . '/jquery-colorbox/example1/colorbox.css', array(), _NP_PLUGIN_VER, true);
-					wp_enqueue_script('jquery-colorbox-js', _NP_ASSETS_URL . '/jquery-colorbox/jquery.colorbox.js', array(), _NP_PLUGIN_VER, true);
+					wp_enqueue_style('jquery-colorbox-css', NP_ASSETS_URL . '/jquery-colorbox/example1/colorbox.css', array(), NP_PLUGIN_CORE_VER, true);
+					wp_enqueue_script('jquery-colorbox-js', NP_ASSETS_URL . '/jquery-colorbox/jquery.colorbox.js', array(), NP_PLUGIN_CORE_VER, true);
 					break;
 				case 'owl-carousel':
-					wp_enqueue_style('owl-carousel', _NP_ASSETS_URL . '/owl-carousel/owl.carousel.css', array(), _NP_THEME_VERSION);
-					wp_enqueue_style('owl-theme', _NP_ASSETS_URL . '/owl-carousel/owl.theme.css', array(), _NP_THEME_VERSION);
-					wp_enqueue_script('jquery-owl-carousel-js', _NP_ASSETS_URL . '/owl-carousel/owl.carousel.js', array(), _NP_THEME_VERSION, true);
+					wp_enqueue_style('owl-carousel', NP_ASSETS_URL . '/owl-carousel/owl.carousel.css', array(), NP_THEME_VERSION);
+					wp_enqueue_style('owl-theme', NP_ASSETS_URL . '/owl-carousel/owl.theme.css', array(), NP_THEME_VERSION);
+					wp_enqueue_script('jquery-owl-carousel-js', NP_ASSETS_URL . '/owl-carousel/owl.carousel.js', array(), NP_THEME_VERSION, true);
 					break;
 				case 'packery':
-					wp_enqueue_script('packery-js', _NP_ASSETS_URL . '/packery/dist/packery.pkgd.min.js', array(), _NP_PLUGIN_VER, true);
+					wp_enqueue_script('packery-js', NP_ASSETS_URL . '/packery/dist/packery.pkgd.min.js', array(), NP_PLUGIN_CORE_VER, true);
 					break;
 				case 'slick':
-					wp_enqueue_style('jquery-colorbox-css', _NP_ASSETS_URL . '/slick-carousel/slick/slick.css', array(), _NP_PLUGIN_VER, true);
-					wp_enqueue_script('jquery-colorbox-js', _NP_ASSETS_URL . '/slick-carousel/slick/slick.min.js', array(), _NP_PLUGIN_VER, true);
+					wp_enqueue_style('jquery-colorbox-css', NP_ASSETS_URL . '/slick-carousel/slick/slick.css', array(), NP_PLUGIN_CORE_VER, true);
+					wp_enqueue_script('jquery-colorbox-js', NP_ASSETS_URL . '/slick-carousel/slick/slick.min.js', array(), NP_PLUGIN_CORE_VER, true);
 					break;
 
 			}
@@ -248,7 +248,7 @@ class Wp {
 	public static function getBlock($blockName, $params = array())
 	{
 		extract($params);
-		$blockDefaultPath = _NP_ENPII_PATH . DIRECTORY_SEPARATOR . 'default-block' . DIRECTORY_SEPARATOR . $blockName . '.php';
+		$blockDefaultPath = NP_ENPII_PATH . DIRECTORY_SEPARATOR . 'default-block' . DIRECTORY_SEPARATOR . $blockName . '.php';
 		$blockThemePath = get_template_directory() . DIRECTORY_SEPARATOR . 'block' . DIRECTORY_SEPARATOR . $blockName . '.php';
 		global $posts, $post, $wp_did_header, $wp_query, $wp_rewrite, $wpdb, $wp_version, $wp, $id, $comment, $user_ID;
 		if (!empty($params)) {
@@ -286,7 +286,7 @@ class Wp {
 					$subFields = array(
 						array(
 							'key' => 'field_573177546f3f7',
-							'label' => __('Image', _NP_TEXT_DOMAIN),
+							'label' => __('Image', NP_TEXT_DOMAIN),
 							'name' => 'image',
 							'type' => 'image',
 							'instructions' => '',
@@ -314,7 +314,7 @@ class Wp {
 					$subFields = array_merge($subFields, array(
 							array(
 								'key' => 'field_5731776b6f3f8',
-								'label' => __('Intro', _NP_TEXT_DOMAIN),
+								'label' => __('Intro', NP_TEXT_DOMAIN),
 								'name' => 'intro',
 								'type' => 'textarea',
 								'instructions' => '',
@@ -340,7 +340,7 @@ class Wp {
 					$subFields = array_merge($subFields, array(
 							array(
 								'key' => 'field_573177766f3f9',
-								'label' => __('Button Text', _NP_TEXT_DOMAIN),
+								'label' => __('Button Text', NP_TEXT_DOMAIN),
 								'name' => 'button_text',
 								'type' => 'text',
 								'instructions' => '',
@@ -366,7 +366,7 @@ class Wp {
 					$subFields = array_merge($subFields, array(
 						array(
 							'key' => 'field_5731777d6f3fa',
-							'label' => __('Button Link', _NP_TEXT_DOMAIN),
+							'label' => __('Button Link', NP_TEXT_DOMAIN),
 							'name' => 'button_link',
 							'type' => 'url',
 							'instructions' => '',
@@ -393,11 +393,11 @@ class Wp {
 
 			acf_add_local_field_group(array(
 				'key' => 'group_5731773fa67da',
-				'title' => __('Options - Main Slider', _NP_TEXT_DOMAIN),
+				'title' => __('Options - Main Slider', NP_TEXT_DOMAIN),
 				'fields' => array(
 					array(
 						'key' => 'field_5731778b6f3fb',
-						'label' => __('Slider', _NP_TEXT_DOMAIN),
+						'label' => __('Slider', NP_TEXT_DOMAIN),
 						'name' => 'slider',
 						'type' => 'repeater',
 						'instructions' => '',
@@ -412,15 +412,15 @@ class Wp {
 						'min' => '',
 						'max' => '',
 						'layout' => 'block',
-						'button_label' => __('Add Slider Item'), _NP_TEXT_DOMAIN,
+						'button_label' => __('Add Slider Item'), NP_TEXT_DOMAIN,
 						'sub_fields' => $subFields
 					),
 					array(
 						'key' => 'field_5731794cc7caa',
-						'label' => __('Autoplay', _NP_TEXT_DOMAIN),
+						'label' => __('Autoplay', NP_TEXT_DOMAIN),
 						'name' => 'autoplay',
 						'type' => 'number',
-						'instructions' => __('In millisecond. Default 0 (not sliding on start).', _NP_TEXT_DOMAIN),
+						'instructions' => __('In millisecond. Default 0 (not sliding on start).', NP_TEXT_DOMAIN),
 						'required' => 0,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -440,10 +440,10 @@ class Wp {
 					),
 					array(
 						'key' => 'field_57317964c7cab',
-						'label' => __('Transition', _NP_TEXT_DOMAIN),
+						'label' => __('Transition', NP_TEXT_DOMAIN),
 						'name' => 'transition',
 						'type' => 'number',
-						'instructions' => __('Speed in millisecond when slider rotating.'), _NP_TEXT_DOMAIN,
+						'instructions' => __('Speed in millisecond when slider rotating.'), NP_TEXT_DOMAIN,
 						'required' => 0,
 						'conditional_logic' => 0,
 						'wrapper' => array(
@@ -483,11 +483,11 @@ class Wp {
 
 			acf_add_local_field_group(array(
 				'key' => 'group_57317811158c8',
-				'title' => __('Page - Main Slider', _NP_TEXT_DOMAIN),
+				'title' => __('Page - Main Slider', NP_TEXT_DOMAIN),
 				'fields' => array(
 					array(
 						'key' => 'field_5731782233e45',
-						'label' => __('Option Slider', _NP_TEXT_DOMAIN),
+						'label' => __('Option Slider', NP_TEXT_DOMAIN),
 						'name' => 'option_slider',
 						'type' => 'radio',
 						'instructions' => '',
@@ -499,9 +499,9 @@ class Wp {
 							'id' => '',
 						),
 						'choices' => array(
-							'no' => __('No Main Slider', _NP_TEXT_DOMAIN),
-							'global' => __('Use Global', _NP_TEXT_DOMAIN),
-							'custom' => __('Use Custom', _NP_TEXT_DOMAIN),
+							'no' => __('No Main Slider', NP_TEXT_DOMAIN),
+							'global' => __('Use Global', NP_TEXT_DOMAIN),
+							'custom' => __('Use Custom', NP_TEXT_DOMAIN),
 						),
 						'other_choice' => 0,
 						'save_other_choice' => 0,
@@ -533,11 +533,11 @@ class Wp {
 						'min' => '',
 						'max' => '',
 						'layout' => 'block',
-						'button_label' => __('Add Slider Item', _NP_TEXT_DOMAIN),
+						'button_label' => __('Add Slider Item', NP_TEXT_DOMAIN),
 						'sub_fields' => array(
 							array(
 								'key' => 'field_5731787533e47',
-								'label' => __('Image', _NP_TEXT_DOMAIN),
+								'label' => __('Image', NP_TEXT_DOMAIN),
 								'name' => 'image',
 								'type' => 'image',
 								'instructions' => '',
@@ -561,7 +561,7 @@ class Wp {
 							),
 							array(
 								'key' => 'field_573178a833e48',
-								'label' => __('Intro', _NP_TEXT_DOMAIN),
+								'label' => __('Intro', NP_TEXT_DOMAIN),
 								'name' => 'intro',
 								'type' => 'textarea',
 								'instructions' => '',
@@ -582,7 +582,7 @@ class Wp {
 							),
 							array(
 								'key' => 'field_573178b133e49',
-								'label' => __('Button Text', _NP_TEXT_DOMAIN),
+								'label' => __('Button Text', NP_TEXT_DOMAIN),
 								'name' => 'button_text',
 								'type' => 'text',
 								'instructions' => '',
@@ -603,7 +603,7 @@ class Wp {
 							),
 							array(
 								'key' => 'field_573178bb33e4a',
-								'label' => __('Button Link', _NP_TEXT_DOMAIN),
+								'label' => __('Button Link', NP_TEXT_DOMAIN),
 								'name' => 'button_link',
 								'type' => 'url',
 								'instructions' => '',
@@ -621,10 +621,10 @@ class Wp {
 					),
 					array(
 						'key' => 'field_573178d746af9',
-						'label' => __('Autoplay', _NP_TEXT_DOMAIN),
+						'label' => __('Autoplay', NP_TEXT_DOMAIN),
 						'name' => 'autoplay',
 						'type' => 'number',
-						'instructions' => __('In millisecond. Default 0 (not sliding on start).', _NP_TEXT_DOMAIN),
+						'instructions' => __('In millisecond. Default 0 (not sliding on start).', NP_TEXT_DOMAIN),
 						'required' => 0,
 						'conditional_logic' => array(
 							array(
@@ -652,10 +652,10 @@ class Wp {
 					),
 					array(
 						'key' => 'field_573178fb46afa',
-						'label' => __('Transition', _NP_TEXT_DOMAIN),
+						'label' => __('Transition', NP_TEXT_DOMAIN),
 						'name' => 'transition',
 						'type' => 'number',
-						'instructions' => __('Speed in millisecond when slider rotating.', _NP_TEXT_DOMAIN),
+						'instructions' => __('Speed in millisecond when slider rotating.', NP_TEXT_DOMAIN),
 						'required' => 0,
 						'conditional_logic' => array(
 							array(
@@ -741,13 +741,13 @@ class Wp {
 	protected function registerStyleMainSlider($type = 1)
 	{
 		if ($type == 1) {
-			$styleDefaultUrl = _NP_ENPII_URL . '/assets/common/main-slider.css';
+			$styleDefaultUrl = NP_ENPII_URL . '/assets/common/main-slider.css';
 			$styleThemePath = get_template_directory() . DIRECTORY_SEPARATOR . 'assets/common/main-slider.css';
 			$styleThemeUrl = get_template_directory_uri() . DIRECTORY_SEPARATOR . 'assets/common/main-slider.css';
 			if (file_exists($styleThemePath)) {
-				wp_enqueue_style('main-slider-css', $styleThemeUrl, array(), _NP_THEME_VERSION);
+				wp_enqueue_style('main-slider-css', $styleThemeUrl, array(), NP_THEME_VERSION);
 			} else {
-				wp_enqueue_style('main-slider-default-css', $styleDefaultUrl, array(), _NP_PLUGIN_VER);
+				wp_enqueue_style('main-slider-default-css', $styleDefaultUrl, array(), NP_PLUGIN_CORE_VER);
 			}
 		}
 	}
@@ -755,13 +755,13 @@ class Wp {
 	protected function registerScriptMainSlider($type)
 	{
 		if ($type == 1) {
-			$scriptDefaultUrl = _NP_ENPII_URL . '/assets/common/main-slider.js';
+			$scriptDefaultUrl = NP_ENPII_URL . '/assets/common/main-slider.js';
 			$scriptThemePath = get_template_directory() . DIRECTORY_SEPARATOR . 'assets/common/main-slider.js';
 			$scriptThemeUrl = get_template_directory_uri() . DIRECTORY_SEPARATOR . 'assets/common/main-slider.js';
 			if (file_exists($scriptThemePath)) {
-				wp_enqueue_script('main-slider-js', $scriptThemeUrl, array(), _NP_THEME_VERSION, true);
+				wp_enqueue_script('main-slider-js', $scriptThemeUrl, array(), NP_THEME_VERSION, true);
 			} else {
-				wp_enqueue_script('main-slider-default-js', $scriptDefaultUrl, array(), _NP_PLUGIN_VER, true);
+				wp_enqueue_script('main-slider-default-js', $scriptDefaultUrl, array(), NP_PLUGIN_CORE_VER, true);
 			}
 		}
 	}
@@ -840,7 +840,7 @@ class Wp {
 	public static function addRoleSiteAdmin()
 	{
 		add_role('site_admin', __(
-			'Site Admin', _NP_TEXT_DOMAIN),
+			'Site Admin', NP_TEXT_DOMAIN),
 			array(
 				'activate_plugins'=>false,
 				'create_users'=>true,

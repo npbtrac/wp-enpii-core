@@ -6,12 +6,13 @@
  * Date: 2/19/16
  * Time: 2:19 PM
  */
-defined( '_ENPII_CORE' ) || define( '_ENPII_CORE', __FILE__ );
-defined( '_NP_ENPII_URL' ) || define( '_NP_ENPII_URL', plugins_url( 'enpii-core' ) );
-defined( '_NP_ENPII_PATH' ) || define( '_NP_ENPII_PATH', __DIR__ );
-defined( '_NP_TEXT_DOMAIN' ) || define( '_NP_TEXT_DOMAIN', 'enpii' );
-defined( '_NP_PLUGIN_VER' ) || define( '_NP_PLUGIN_VER', 0.1 );
-defined( '_NP_ASSETS_URL' ) || define( '_NP_ASSETS_URL', plugins_url( 'enpii-core' ) . DIRECTORY_SEPARATOR . 'assets' );
+defined( 'NP_PLUGIN_CORE_VER' ) || define( 'NP_PLUGIN_CORE_VER', 0.1 );
+
+defined( 'NP_ENPII_URL' ) || define( 'NP_ENPII_URL', plugins_url( 'enpii-core' ) );
+defined( 'NP_ENPII_PATH' ) || define( 'NP_ENPII_PATH', __DIR__ );
+
+defined( 'NP_TEXT_DOMAIN' ) || define( 'NP_TEXT_DOMAIN', 'enpii' );
+defined( 'NP_ASSETS_URL' ) || define( 'NP_ASSETS_URL', plugins_url( 'enpii-core' ) . DIRECTORY_SEPARATOR . 'assets' );
 
 require_once "vendor/autoload.php";
 
@@ -23,7 +24,7 @@ class NpCore {
 		$plugin = 'advanced-custom-fields-pro/acf.php';
 		if ( ! is_plugin_active( $plugin ) ) {
 			deactivate_plugins( plugin_basename( __FILE__ ) );
-			die( __( 'Enpii Core requires ACF pro', _NP_TEXT_DOMAIN ) );
+			die( __( 'Enpii Core requires ACF pro', NP_TEXT_DOMAIN ) );
 		} else {
 			Enpii\WpEnpiiCore\Wp::addRoleSiteAdmin();
 		}
