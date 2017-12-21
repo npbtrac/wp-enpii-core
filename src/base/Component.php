@@ -8,7 +8,9 @@
 namespace Enpii\WpEnpiiCore\Base;
 
 
-abstract class Component {
+class Component {
+	public static $instance;
+
 	public function __set( $key, $value ) {
 		if ( empty( $this->$key ) ) {
 			$this->$key = $value;
@@ -19,11 +21,16 @@ abstract class Component {
 		return empty( $this->$key ) ? null : $this->$key;
 	}
 
-	public function __construct( $config = null ) {
-		foreach ( (array) $config as $key => $value ) {
-			if ( property_exists( get_class( $this ), $key ) ) {
-				$this->$key = $value;
+	public static function initInstance( $config = null ) {
+		if ( ! empty( $config ) && empty( static::$instance ) ) {
+			static::$instance = new static();
+			foreach ( (array) $config as $key => $value ) {
+				if ( property_exists( get_class( static::$instance ), $key ) ) {
+					static::$instance->$key = $value;
+				}
 			}
 		}
+
+		return static::$instance;
 	}
 }
