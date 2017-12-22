@@ -11,4 +11,6 @@ use Enpii\WpEnpiiCore\Base\Component;
 
 class WpTheme extends Component {
 
+	public $text_domain;
+
 }
