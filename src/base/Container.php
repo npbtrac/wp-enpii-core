@@ -8,42 +8,64 @@
 namespace Enpii\WpEnpiiCore\Base;
 
 
-class Container extends Component {
+class Container extends BaseComponent {
 	/**
-	 * @var array singleton objects indexed by their types
+	 * @var array of components used in applications
 	 */
 	protected $_components = [];
 
 	protected $_config = [];
 
+	/**
+	 * Container constructor.
+	 * Initialize components' configuration from external values
+	 *
+	 * @param null $config
+	 */
 	public function __construct( $config = null ) {
 		if ( ! empty( $config['components'] ) ) {
 			$this->_config = $config['components'];
 		}
 	}
 
-	public function getComponent( $alias ) {
+	/**
+	 * Get a component for using
+	 * Only initialize component is used (lazy loading)
+	 *
+	 * @param $alias
+	 *
+	 * @return mixed|null
+	 */
+	public function get_component( $alias ) {
 		if ( empty( $this->_components[ $alias ] ) ) {
 			if ( empty( $this->_config[ $alias ] ) ) {
 				$component = null;
 			} else {
-				$component = $this->setComponent( $alias, $this->_config[ $alias ] );
+				$component = $this->set_component( $alias, $this->_config[ $alias ] );
 			}
+
 			return $this->_components[ $alias ] = $component;
 		}
 
 		return $this->_components[ $alias ];
 	}
 
-	public function setComponent( $alias, $componentConfig ) {
-		if ( empty( $componentConfig['className'] ) ) {
+	/**
+	 * Initialize a component using it's configuration
+	 *
+	 * @param $alias
+	 * @param $component_config
+	 *
+	 * @return null
+	 */
+	public function set_component( $alias, $component_config ) {
+		if ( empty( $component_config['class'] ) ) {
 			return null;
 		}
-		$className = $componentConfig['className'];
-		unset( $componentConfig['className'] );
+		$class_name = $component_config['class'];
+		unset( $component_config['class'] );
 
-		return $this->_components[ $alias ] = $className::initInstance($componentConfig);
-
+		return $this->_components[ $alias ] = new $class_name( $component_config );
 	}
 
 }

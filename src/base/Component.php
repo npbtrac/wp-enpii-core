@@ -8,29 +8,21 @@
 namespace Enpii\WpEnpiiCore\Base;
 
 
-class Component {
-	public static $instance;
+class Component extends BaseComponent {
 
-	public function __set( $key, $value ) {
-		if ( empty( $this->$key ) ) {
-			$this->$key = $value;
-		}
-	}
-
-	public function __get( $key ) {
-		return empty( $this->$key ) ? null : $this->$key;
-	}
-
-	public static function initInstance( $config = null ) {
-		if ( ! empty( $config ) && empty( static::$instance ) ) {
-			static::$instance = new static();
+	/**
+	 * Component constructor.
+	 * Initialize values for object based on configuration array
+	 *
+	 * @param null|array $config
+	 */
+	public function __construct( $config = null ) {
+		if ( ! empty( $config ) ) {
 			foreach ( (array) $config as $key => $value ) {
-				if ( property_exists( get_class( static::$instance ), $key ) ) {
-					static::$instance->$key = $value;
+				if ( property_exists( get_class( $this ), $key ) ) {
+					$this->$key = $value;
 				}
 			}
 		}
-
-		return static::$instance;
 	}
 }
