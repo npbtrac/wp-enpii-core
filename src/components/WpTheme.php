@@ -11,6 +11,7 @@ use Enpii\WpEnpiiCore\Base\Component;
 
 class WpTheme extends Component {
 
+	public $version;
 	public $text_domain;
 	public $base_path;
 	public $base_url;
@@ -30,6 +31,7 @@ class WpTheme extends Component {
 	 */
 	public function initialize() {
 		add_action( 'after_setup_theme', [ $this, 'after_setup_theme' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'wp_enqueue_scripts' ] );
 	}
 
 	/**
@@ -112,5 +114,13 @@ class WpTheme extends Component {
 		$starter_content = [];
 		$starter_content = apply_filters( 'enpii_starter_content', $starter_content );
 		add_theme_support( 'starter-content', $starter_content );
+	}
+
+	/**
+	 * This method called when 'wp_enqueue_scripts' fired
+	 * For handling javascript and stylesheets
+	 */
+	public function wp_enqueue_scripts() {
+
 	}
 }
