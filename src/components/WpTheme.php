@@ -11,8 +11,15 @@ use Enpii\WpEnpiiCore\Base\Component;
 
 class WpTheme extends Component {
 
+	/* @var string represent current version of theme */
 	public $version;
+
+	/* @var string for theme translation */
 	public $text_domain;
+
+	/* @var bool choose to load popular assets from CDN or not */
+	public $use_cdn = false;
+
 	public $base_path;
 	public $base_url;
 	public $child_base_path;
@@ -32,6 +39,7 @@ class WpTheme extends Component {
 	public function initialize() {
 		add_action( 'after_setup_theme', [ $this, 'after_setup_theme' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'wp_enqueue_scripts' ] );
+		add_action( 'widgets_init', [ $this, 'widgets_init' ] );
 	}
 
 	/**
@@ -40,6 +48,7 @@ class WpTheme extends Component {
 	public function after_setup_theme() {
 		$this->load_theme_textdomain( $this->text_domain, $this->get_lang_path() );
 		$this->add_theme_support();
+		$this->register_nav_menus();
 	}
 
 	/**
@@ -117,10 +126,69 @@ class WpTheme extends Component {
 	}
 
 	/**
+	 * Register navigation menus for theme
+	 */
+	public function register_nav_menus() {
+		// This theme uses wp_nav_menu() in two locations.
+		register_nav_menus( array(
+			'primary-menu'   => __( 'Primary Menu', $this->text_domain ),
+			'secondary-menu' => __( 'Secondary Menu', $this->text_domain ),
+		) );
+	}
+
+	/**
 	 * This method called when 'wp_enqueue_scripts' fired
 	 * For handling javascript and stylesheets
 	 */
 	public function wp_enqueue_scripts() {
+
+	}
+
+	/**
+	 * This method called when 'widgets_init' fired
+	 */
+	public function widgets_init() {
+
+	}
+
+	/**
+	 * Add inline scripts to the output
+	 *
+	 * @param $handle
+	 * @param $data
+	 * @param string $position
+	 */
+	public function add_inline_script( $handle, $data, $position = 'after' ) {
+		wp_add_inline_script( $handle, $data, $position );
+	}
+
+	/**
+	 * Get a template inside a theme with parameters
+	 *
+	 * @param $slug
+	 * @param array $args
+	 */
+	public function get_template_part( $slug, $args = [] ) {
+		/* @var \WP_Query $wp_query */
+		global $wp_query;
+
+		// Put local arguments to query_vars then revert it back to original
+		$old_query_vars = $wp_query->query_vars;
+		$wp_query->query_vars = (array) $wp_query->query_vars;
+		foreach ($args as $key => $val) {
+			if (!is_integer($key)) {
+				$wp_query->query_vars[$key] = $val;
+			}
+		}
+
+		ob_start();
+		get_template_part( $slug );
+		$result = ob_get_contents();
+		ob_end_clean();
+
+		$wp_query->query_vars = $old_query_vars;
+
+		return $result;
 
 	}
 }
