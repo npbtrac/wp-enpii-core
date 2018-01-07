@@ -9,7 +9,7 @@ namespace Enpii\WpEnpiiCore\Base;
 
 /**
  * Class WebApp
- * @package Enpii\WpEnpiiCore\Basei
+ * @package Enpii\WpEnpiiCore\Base
  *
  * For serving web application
  */
