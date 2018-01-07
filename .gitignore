@@ -42,7 +42,3 @@ prepros.cfg
 # CodeKit
 config.codekit
 .codekit-cache
-
-# Composer
-vendor/*
-!vendor/.gitkeep
