@@ -1,15 +1,14 @@
 <?php
 /**
  * Created by PhpStorm.
- * Author: npbtrac@yahoo.com
- * Date time: 12/1/17 2:06 PM
+ * User: tracnguyen
+ * Date: 5/1/18
+ * Time: 9:36 PM
  */
 
 namespace Enpii\WpEnpiiCore;
 
-
 class Wp {
-
 	/**
 	 * Get option from ACF option, with WPML supported
 	 *
@@ -51,20 +50,16 @@ class Wp {
 	 * Get content of a template block for the layout with params
 	 * Template file should be in `templates` folder of child theme, parent theme or of this plugin
 	 *
-	 * @param string $template_name name of the template
+	 * @param string $template_slug name of the template
 	 * @param array $params arguments needed to be sent to the view
 	 *
 	 * @return string
-	 * @throws \Exception
 	 */
-	public static function get_template_block( $template_name, $params = array() ) {
-		global $wp_query;
-
+	public static function get_template_block( $template_slug, $params = [] ) {
 		extract( $params );
-		$template_default_path     = NP_ENPII_PATH . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $template_name . '.php';
-		$template_theme_path       = get_template_directory() . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $template_name . '.php';
-		$template_child_theme_path = get_stylesheet_directory() . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $template_name . '.php';
-
+		$template_default_path     = NP_ENPII_PATH . DIRECTORY_SEPARATOR . $template_slug . '.php';
+		$template_theme_path       = get_template_directory() . DIRECTORY_SEPARATOR . $template_slug . '.php';
+		$template_child_theme_path = get_stylesheet_directory() . DIRECTORY_SEPARATOR . $template_slug . '.php';
 		ob_start();
 		if ( file_exists( $template_child_theme_path ) ) {
 			include $template_child_theme_path;
@@ -72,73 +67,40 @@ class Wp {
 			include $template_theme_path;
 		} else if ( file_exists( $template_default_path ) ) {
 			include( $template_default_path );
-		} else {
-			throw new \Exception( 'Error: Template ' . $template_name . ' Not Found.' );
 		}
 		$result = ob_get_contents();
 		ob_end_clean();
 
 		return $result;
-
 	}
 
 	/**
-	 * Load Bootstrap 3 JS
-	 */
-	public static function use_boostrap3_js() {
-		wp_enqueue_script( 'bootstrap3-js', NP_ASSETS_URL . '/bootstrap/dist/js/bootstrap.min.js', array( 'jquery' ), NP_PLUGIN_CORE_VER, true );
-	}
-
-	/**
-	 * Load Font Awesome
-	 */
-	public static function use_font_awesome( $use_cdn = false ) {
-		wp_enqueue_style( 'font-awesome', $use_cdn ? 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' : NP_ASSETS_URL . '/font-awesome/css/font-awesome.min.css', array(), NP_PLUGIN_CORE_VER, 'all' );
-	}
-
-	/**
-	 * Load BxSlider assets
-	 */
-	public static function use_bx_slider() {
-		wp_enqueue_style( 'bx-slider', NP_ASSETS_URL . '/bxslider-4/dist/jquery.bxslider.css', array(), NP_PLUGIN_CORE_VER, 'all' );
-		wp_enqueue_script( 'bx-slider', NP_ASSETS_URL . '/bxslider-4/dist/jquery.bxslider.min.js', array( 'jquery' ), NP_PLUGIN_CORE_VER, true );
-	}
-
-	/**
-	 * Load Slick Carousel assets
-	 */
-	public static function use_slick_carousel() {
-		wp_enqueue_style( 'slick-carousel', NP_ASSETS_URL . '/slick-carousel/slick/slick.css', array(), NP_PLUGIN_CORE_VER, 'all' );
-		wp_enqueue_script( 'slick-carousel', NP_ASSETS_URL . '/slick-carousel/slick/slick.min.js', array(), NP_PLUGIN_CORE_VER, true );
-	}
-
-	/**
-	 * @param $postType string, name of the post type to be registered with WP
+     * Register basic custom post type
+	 * @param $post_type string, name of the post type to be registered with WP
 	 * @param $slug string, slug of the post type
-	 * @param $pluralName string, plural name of the post type
-	 * @param $singularName string, singular name of the post type
-	 * @param $menuPosition int, position in sidebar menu
+	 * @param $plural_name string, plural name of the post type
+	 * @param $singular_name string, singular name of the post type
+	 * @param $menu_position int, position in sidebar menu
 	 */
-	public static function registerPostType( $postType, $slug, $pluralName, $singularName, $menuPosition ) {
-		if ( ! empty( $postType ) ) {
+	public static function register_post_type( $post_type, $slug, $plural_name, $singular_name, $menu_position ) {
+		if ( ! empty( $post_type ) ) {
 			$labels = array(
-				'name'               => _x( $pluralName, 'post type general name', NP_TEXT_DOMAIN ),
-				'singular_name'      => _x( $singularName, 'post type singular name', NP_TEXT_DOMAIN ),
-				'menu_name'          => _x( $pluralName, 'admin menu', NP_TEXT_DOMAIN ),
-				'name_admin_bar'     => _x( $singularName, 'add new on admin bar', NP_TEXT_DOMAIN ),
-				'add_new'            => _x( sprintf( 'Add New %s', $singularName ), NP_TEXT_DOMAIN ),
-				'add_new_item'       => __( sprintf( 'Add New %s', $singularName ), NP_TEXT_DOMAIN ),
-				'new_item'           => __( sprintf( 'New %s', $singularName ), NP_TEXT_DOMAIN ),
-				'edit_item'          => __( sprintf( 'Edit %s', $singularName ), NP_TEXT_DOMAIN ),
-				'view_item'          => __( sprintf( 'View %s', $singularName ), NP_TEXT_DOMAIN ),
-				'all_items'          => __( sprintf( 'All %s', $pluralName ), NP_TEXT_DOMAIN ),
-				'search_items'       => __( sprintf( 'Search %s', $pluralName ), NP_TEXT_DOMAIN ),
-				'parent_item_colon'  => __( sprintf( 'Parent %s :', $singularName ), NP_TEXT_DOMAIN ),
-				'not_found'          => __( sprintf( 'No %s found', $pluralName ), NP_TEXT_DOMAIN ),
-				'not_found_in_trash' => __( sprintf( 'No %s found in Trash.', $pluralName ), NP_TEXT_DOMAIN )
+				'name'               => _x( $plural_name, 'post type general name', Base::TEXT_DOMAIN ),
+				'singular_name'      => _x( $singular_name, 'post type singular name', Base::TEXT_DOMAIN ),
+				'menu_name'          => _x( $plural_name, 'admin menu', Base::TEXT_DOMAIN ),
+				'name_admin_bar'     => _x( $singular_name, 'add new on admin bar', Base::TEXT_DOMAIN ),
+				'add_new'            => _x( sprintf( 'Add New %s', $singular_name ), Base::TEXT_DOMAIN ),
+				'add_new_item'       => __( sprintf( 'Add New %s', $singular_name ), Base::TEXT_DOMAIN ),
+				'new_item'           => __( sprintf( 'New %s', $singular_name ), Base::TEXT_DOMAIN ),
+				'edit_item'          => __( sprintf( 'Edit %s', $singular_name ), Base::TEXT_DOMAIN ),
+				'view_item'          => __( sprintf( 'View %s', $singular_name ), Base::TEXT_DOMAIN ),
+				'all_items'          => __( sprintf( 'All %s', $plural_name ), Base::TEXT_DOMAIN ),
+				'search_items'       => __( sprintf( 'Search %s', $plural_name ), Base::TEXT_DOMAIN ),
+				'parent_item_colon'  => __( sprintf( 'Parent %s :', $singular_name ), Base::TEXT_DOMAIN ),
+				'not_found'          => __( sprintf( 'No %s found', $plural_name ), Base::TEXT_DOMAIN ),
+				'not_found_in_trash' => __( sprintf( 'No %s found in Trash.', $plural_name ), Base::TEXT_DOMAIN )
 			);
-
-			$args = array(
+			$args   = array(
 				'labels'             => $labels,
 				'public'             => true,
 				'publicly_queryable' => true,
@@ -149,36 +111,43 @@ class Wp {
 				'capability_type'    => 'post',
 				'has_archive'        => true,
 				'hierarchical'       => false,
-				'menu_position'      => $menuPosition,
+				'menu_position'      => $menu_position,
 				'supports'           => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt' )
 			);
-			register_post_type( $postType, $args );
+			register_post_type( $post_type, $args );
 		}
 	}
 
-	public static function registerTaxonomy( $taxonomy, $slugTaxonomy, $postType, $pluralName, $singularName ) {
+	/**
+     * Register basic custom taxonomy
+	 * @param $taxonomy
+	 * @param $slug_taxonomy
+	 * @param $post_type
+	 * @param $plural_name
+	 * @param $singular_name
+	 */
+	public static function register_taxonomy( $taxonomy, $slug_taxonomy, $post_type, $plural_name, $singular_name ) {
 		if ( ! empty( $taxonomy ) ) {
-			register_taxonomy( $taxonomy, $postType, array(
+			register_taxonomy( $taxonomy, $post_type, array(
 				// Hierarchical taxonomy (like categories)
 				'hierarchical' => true,
 				// This array of options controls the labels displayed in the WordEvent Admin UI
 				'labels'       => array(
-					'name'              => _x( $pluralName, 'taxonomy general name' ),
-					'singular_name'     => _x( $singularName, 'taxonomy singular name' ),
-					'search_items'      => __( sprintf( 'Search %s', $singularName ) ),
-					'all_items'         => __( sprintf( 'All %s', $pluralName ) ),
-					'parent_item'       => __( sprintf( 'Parent %s', $singularName ) ),
-					'parent_item_colon' => __( sprintf( 'Parent %s :', $singularName ) ),
-					'edit_item'         => __( sprintf( 'Edit %s', $singularName ) ),
-					'update_item'       => __( sprintf( 'Update %s ', $singularName ) ),
-					'add_new_item'      => __( sprintf( 'Add New %s', $singularName ) ),
-					'new_item_name'     => __( sprintf( 'New %s', $singularName ) ),
-					'menu_name'         => __( $pluralName ),
+					'name'              => _x( $plural_name, 'taxonomy general name', Base::TEXT_DOMAIN ),
+					'singular_name'     => _x( $singular_name, 'taxonomy singular name', Base::TEXT_DOMAIN ),
+					'search_items'      => __( sprintf( 'Search %s', $singular_name ), Base::TEXT_DOMAIN ),
+					'all_items'         => __( sprintf( 'All %s', $plural_name ), Base::TEXT_DOMAIN ),
+					'parent_item'       => __( sprintf( 'Parent %s', $singular_name ), Base::TEXT_DOMAIN ),
+					'parent_item_colon' => __( sprintf( 'Parent %s :', $singular_name ), Base::TEXT_DOMAIN ),
+					'edit_item'         => __( sprintf( 'Edit %s', $singular_name ), Base::TEXT_DOMAIN ),
+					'update_item'       => __( sprintf( 'Update %s ', $singular_name ), Base::TEXT_DOMAIN ),
+					'add_new_item'      => __( sprintf( 'Add New %s', $singular_name ), Base::TEXT_DOMAIN ),
+					'new_item_name'     => __( sprintf( 'New %s', $singular_name ), Base::TEXT_DOMAIN ),
+					'menu_name'         => __( $plural_name, Base::TEXT_DOMAIN ),
 				),
-
 				// Control the slugs used for this taxonomy
 				'rewrite'      => array(
-					'slug'         => $slugTaxonomy, // This controls the base slug that will display before each term
+					'slug'         => $slug_taxonomy, // This controls the base slug that will display before each term
 					'with_front'   => false, // Don't display the category base before "/locations/"
 					'hierarchical' => true // This will allow URL's like "/locations/boston/cambridge/"
 				),
@@ -186,82 +155,87 @@ class Wp {
 		}
 	}
 
-	public static function useAddOn( $libs = array() ) {
-		$default = array(
-			'bootstrap-js',
-			'bx-slider',
-			'detect-izr',
-			'modern-izr',
-			'font-awesome',
-			'color-box',
-			'owl-carousel',
-			'packery',
-			'slick',
+	/**
+	 * Add a custom Site Admin role, a role can control user but unable to manage plugins, themes
+	 */
+	public static function add_role_site_admin() {
+		add_role( 'site_admin', __(
+			'Site Admin', Base::TEXT_DOMAIN ),
+			array(
+				'activate_plugins'       => false,
+				'create_users'           => true,
+				'delete_others_pages'    => true,
+				'delete_others_posts'    => true,
+				'delete_pages'           => true,
+				'delete_plugins'         => false,
+				'delete_posts'           => true,
+				'delete_private_pages'   => true,
+				'delete_private_posts'   => true,
+				'delete_published_pages' => true,
+				'delete_published_posts' => true,
+				'delete_themes'          => false,
+				'delete_users'           => true,
+				'edit_dashboard'         => true,
+				'edit_others_pages'      => true,
+				'edit_others_posts'      => true,
+				'edit_pages'             => true,
+				'edit_plugins'           => false,
+				'edit_posts'             => true,
+				'edit_private_pages'     => true,
+				'edit_private_posts'     => true,
+				'edit_published_pages'   => true,
+				'edit_published_posts'   => true,
+				'edit_theme_options'     => true,
+				'edit_themes'            => false,
+				'edit_users'             => true,
+				'export'                 => true,
+				'import'                 => true,
+				'install_plugins'        => false,
+				'install_themes'         => false,
+				'list_users'             => true,
+				'manage_categories'      => true,
+				'manage_links'           => true,
+				'manage_options'         => true,
+				'moderate_comments'      => true,
+				'promote_users'          => true,
+				'publish_pages'          => true,
+				'publish_posts'          => true,
+				'read'                   => true,
+				'read_private_pages'     => true,
+				'read_private_posts'     => true,
+				'remove_users'           => true,
+				'switch_themes'          => true,
+				'unfiltered_html'        => true,
+				'unfiltered_upload'      => true,
+				'update_core'            => false,
+				'update_plugins'         => false,
+				'update_themes'          => false,
+				'upload_files'           => true,
+				'copy_posts'             => true,
+				'create_posts'           => true,
+				'publish_s'              => true,
+				'read_private_s'         => true,
+				'wpseo_bulk_edit'        => true,
+			)
 		);
-		if ( empty( $libs ) ) {
-			$libs = $default;
-		}
-		foreach ( $libs as $item ) {
-			switch ( $item ) {
-				case 'bootstrap-js':
-					wp_enqueue_script( 'bootstrap-js', NP_ASSETS_URL . '/bootstrap/dist/js/bootstrap.min.js', array(), NP_PLUGIN_CORE_VER, true );
-					break;
-				case 'bx-slider' :
-					wp_enqueue_style( 'bx-slider-css', NP_ASSETS_URL . '/bxslider-4/dist/jquery.bxslider.css', array(), NP_PLUGIN_CORE_VER, true );
-					wp_enqueue_script( 'bx-slider-js', NP_ASSETS_URL . '/bxslider-4/dist/jquery.bxslider.min.js', array(), NP_PLUGIN_CORE_VER, true );
-					wp_enqueue_script( 'main-slider', NP_ASSETS_URL . '/bxslider-4/dist/jquery.bxslider.min.js', array(), NP_PLUGIN_CORE_VER, true );
-					break;
-				case 'detect-izr' :
-					wp_enqueue_script( 'detect-izr', NP_ASSETS_URL . '/detectizr/dist/detectizr.min.js', array(), NP_PLUGIN_CORE_VER, true );
-					break;
-				case 'modern-izr' :
-					wp_enqueue_script( 'modern-izr', NP_ASSETS_URL . '/modernizr/modernizr.min.js', array(), NP_PLUGIN_CORE_VER, true );
-					break;
-				case 'font-awesome':
-					wp_enqueue_style( 'font-awesome', NP_ASSETS_URL . '/font-awesome/css/font-awesome.min.css', array(), NP_PLUGIN_CORE_VER, true );
-					break;
-				case 'color-box':
-					wp_enqueue_style( 'jquery-colorbox-css', NP_ASSETS_URL . '/jquery-colorbox/example1/colorbox.css', array(), NP_PLUGIN_CORE_VER, true );
-					wp_enqueue_script( 'jquery-colorbox-js', NP_ASSETS_URL . '/jquery-colorbox/jquery.colorbox.js', array(), NP_PLUGIN_CORE_VER, true );
-					break;
-				case 'owl-carousel':
-					wp_enqueue_style( 'owl-carousel', NP_ASSETS_URL . '/owl-carousel/owl.carousel.css', array(), NP_THEME_VERSION );
-					wp_enqueue_style( 'owl-theme', NP_ASSETS_URL . '/owl-carousel/owl.theme.css', array(), NP_THEME_VERSION );
-					wp_enqueue_script( 'jquery-owl-carousel-js', NP_ASSETS_URL . '/owl-carousel/owl.carousel.js', array(), NP_THEME_VERSION, true );
-					break;
-				case 'packery':
-					wp_enqueue_script( 'packery-js', NP_ASSETS_URL . '/packery/dist/packery.pkgd.min.js', array(), NP_PLUGIN_CORE_VER, true );
-					break;
-				case 'slick':
-					wp_enqueue_style( 'jquery-colorbox-css', NP_ASSETS_URL . '/slick-carousel/slick/slick.css', array(), NP_PLUGIN_CORE_VER, true );
-					wp_enqueue_script( 'jquery-colorbox-js', NP_ASSETS_URL . '/slick-carousel/slick/slick.min.js', array(), NP_PLUGIN_CORE_VER, true );
-					break;
-
-			}
-		}
 	}
 
+	/**
+	 * Load Font Awesome
+     * @param bool $use_cdn
+	 */
+	public static function load_font_awesome( $use_cdn = false ) {
+		wp_enqueue_style( 'font-awesome', $use_cdn ? 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' : NP_ASSETS_URL . '/font-awesome/web-fonts-with-css/css/fontawesome-all.min.css', array(), NP_PLUGIN_CORE_VER, 'all' );
+	}
 
-	public static function getBlock( $blockName, $params = array() ) {
-		extract( $params );
-		$blockDefaultPath = NP_ENPII_PATH . DIRECTORY_SEPARATOR . 'default-block' . DIRECTORY_SEPARATOR . $blockName . '.php';
-		$blockThemePath   = get_template_directory() . DIRECTORY_SEPARATOR . 'block' . DIRECTORY_SEPARATOR . $blockName . '.php';
-		global $posts, $post, $wp_did_header, $wp_query, $wp_rewrite, $wpdb, $wp_version, $wp, $id, $comment, $user_ID;
-		if ( ! empty( $params ) ) {
-			$args = array_merge( $wp_query->query, $params );
-			query_posts( $args );
-		}
-		if ( is_array( $wp_query->query_vars ) ) {
-			extract( $wp_query->query_vars, EXTR_SKIP );
-		}
-		if ( file_exists( $blockThemePath ) ) {
-			include $blockThemePath;
-		} else if ( file_exists( $blockDefaultPath ) ) {
-			include( $blockDefaultPath );
-		} else {
-			echo 'Error: File Not Found.';
-		}
+	/**
+     * Load BxSlider assets
+	 * @param bool $use_cdn
+	 */
+	public static function load_bxslider( $use_cdn = false ) {
+		wp_enqueue_style( 'bxslider', $use_cdn ? 'https://cdnjs.cloudflare.com/ajax/libs/bxslider/4.2.15/jquery.bxslider.min.css' : NP_ASSETS_URL . '/bxslider-4/dist/jquery.bxslider.min.css', array(), NP_PLUGIN_CORE_VER, 'screen' );
 
+		wp_enqueue_script( 'bxslider', $use_cdn ? 'https://cdnjs.cloudflare.com/ajax/libs/bxslider/4.2.15/jquery.bxslider.min.js' : NP_ASSETS_URL . '/bxslider-4/dist/jquery.bxslider.min.js', ['jquery'], NP_PLUGIN_CORE_VER, true );
 	}
 
 	public static function registerMainSlider( $args = array() ) {
@@ -281,7 +255,7 @@ class Wp {
 					$subFields = array(
 						array(
 							'key'               => 'field_573177546f3f7',
-							'label'             => __( 'Image', NP_TEXT_DOMAIN ),
+							'label'             => __( 'Image', Base::TEXT_DOMAIN ),
 							'name'              => 'image',
 							'type'              => 'image',
 							'instructions'      => '',
@@ -309,7 +283,7 @@ class Wp {
 					$subFields = array_merge( $subFields, array(
 							array(
 								'key'               => 'field_5731776b6f3f8',
-								'label'             => __( 'Intro', NP_TEXT_DOMAIN ),
+								'label'             => __( 'Intro', Base::TEXT_DOMAIN ),
 								'name'              => 'intro',
 								'type'              => 'textarea',
 								'instructions'      => '',
@@ -335,7 +309,7 @@ class Wp {
 					$subFields = array_merge( $subFields, array(
 							array(
 								'key'               => 'field_573177766f3f9',
-								'label'             => __( 'Button Text', NP_TEXT_DOMAIN ),
+								'label'             => __( 'Button Text', Base::TEXT_DOMAIN ),
 								'name'              => 'button_text',
 								'type'              => 'text',
 								'instructions'      => '',
@@ -361,7 +335,7 @@ class Wp {
 					$subFields = array_merge( $subFields, array(
 						array(
 							'key'               => 'field_5731777d6f3fa',
-							'label'             => __( 'Button Link', NP_TEXT_DOMAIN ),
+							'label'             => __( 'Button Link', Base::TEXT_DOMAIN ),
 							'name'              => 'button_link',
 							'type'              => 'url',
 							'instructions'      => '',
@@ -385,14 +359,13 @@ class Wp {
 			}
 		}
 		if ( function_exists( 'acf_add_local_field_group' ) ):
-
 			acf_add_local_field_group( array(
 				'key'                   => 'group_5731773fa67da',
-				'title'                 => __( 'Options - Main Slider', NP_TEXT_DOMAIN ),
+				'title'                 => __( 'Options - Main Slider', Base::TEXT_DOMAIN ),
 				'fields'                => array(
 					array(
 						'key'               => 'field_5731778b6f3fb',
-						'label'             => __( 'Slider', NP_TEXT_DOMAIN ),
+						'label'             => __( 'Slider', Base::TEXT_DOMAIN ),
 						'name'              => 'slider',
 						'type'              => 'repeater',
 						'instructions'      => '',
@@ -408,15 +381,15 @@ class Wp {
 						'max'               => '',
 						'layout'            => 'block',
 						'button_label'      => __( 'Add Slider Item' ),
-						NP_TEXT_DOMAIN,
+						Base::TEXT_DOMAIN,
 						'sub_fields'        => $subFields
 					),
 					array(
 						'key'               => 'field_5731794cc7caa',
-						'label'             => __( 'Autoplay', NP_TEXT_DOMAIN ),
+						'label'             => __( 'Autoplay', Base::TEXT_DOMAIN ),
 						'name'              => 'autoplay',
 						'type'              => 'number',
-						'instructions'      => __( 'In millisecond. Default 0 (not sliding on start).', NP_TEXT_DOMAIN ),
+						'instructions'      => __( 'In millisecond. Default 0 (not sliding on start).', Base::TEXT_DOMAIN ),
 						'required'          => 0,
 						'conditional_logic' => 0,
 						'wrapper'           => array(
@@ -436,11 +409,11 @@ class Wp {
 					),
 					array(
 						'key'               => 'field_57317964c7cab',
-						'label'             => __( 'Transition', NP_TEXT_DOMAIN ),
+						'label'             => __( 'Transition', Base::TEXT_DOMAIN ),
 						'name'              => 'transition',
 						'type'              => 'number',
 						'instructions'      => __( 'Speed in millisecond when slider rotating.' ),
-						NP_TEXT_DOMAIN,
+						Base::TEXT_DOMAIN,
 						'required'          => 0,
 						'conditional_logic' => 0,
 						'wrapper'           => array(
@@ -477,14 +450,13 @@ class Wp {
 				'active'                => 1,
 				'description'           => '',
 			) );
-
 			acf_add_local_field_group( array(
 				'key'                   => 'group_57317811158c8',
-				'title'                 => __( 'Page - Main Slider', NP_TEXT_DOMAIN ),
+				'title'                 => __( 'Page - Main Slider', Base::TEXT_DOMAIN ),
 				'fields'                => array(
 					array(
 						'key'               => 'field_5731782233e45',
-						'label'             => __( 'Option Slider', NP_TEXT_DOMAIN ),
+						'label'             => __( 'Option Slider', Base::TEXT_DOMAIN ),
 						'name'              => 'option_slider',
 						'type'              => 'radio',
 						'instructions'      => '',
@@ -496,9 +468,9 @@ class Wp {
 							'id'    => '',
 						),
 						'choices'           => array(
-							'no'     => __( 'No Main Slider', NP_TEXT_DOMAIN ),
-							'global' => __( 'Use Global', NP_TEXT_DOMAIN ),
-							'custom' => __( 'Use Custom', NP_TEXT_DOMAIN ),
+							'no'     => __( 'No Main Slider', Base::TEXT_DOMAIN ),
+							'global' => __( 'Use Global', Base::TEXT_DOMAIN ),
+							'custom' => __( 'Use Custom', Base::TEXT_DOMAIN ),
 						),
 						'other_choice'      => 0,
 						'save_other_choice' => 0,
@@ -530,11 +502,11 @@ class Wp {
 						'min'               => '',
 						'max'               => '',
 						'layout'            => 'block',
-						'button_label'      => __( 'Add Slider Item', NP_TEXT_DOMAIN ),
+						'button_label'      => __( 'Add Slider Item', Base::TEXT_DOMAIN ),
 						'sub_fields'        => array(
 							array(
 								'key'               => 'field_5731787533e47',
-								'label'             => __( 'Image', NP_TEXT_DOMAIN ),
+								'label'             => __( 'Image', Base::TEXT_DOMAIN ),
 								'name'              => 'image',
 								'type'              => 'image',
 								'instructions'      => '',
@@ -558,7 +530,7 @@ class Wp {
 							),
 							array(
 								'key'               => 'field_573178a833e48',
-								'label'             => __( 'Intro', NP_TEXT_DOMAIN ),
+								'label'             => __( 'Intro', Base::TEXT_DOMAIN ),
 								'name'              => 'intro',
 								'type'              => 'textarea',
 								'instructions'      => '',
@@ -579,7 +551,7 @@ class Wp {
 							),
 							array(
 								'key'               => 'field_573178b133e49',
-								'label'             => __( 'Button Text', NP_TEXT_DOMAIN ),
+								'label'             => __( 'Button Text', Base::TEXT_DOMAIN ),
 								'name'              => 'button_text',
 								'type'              => 'text',
 								'instructions'      => '',
@@ -600,7 +572,7 @@ class Wp {
 							),
 							array(
 								'key'               => 'field_573178bb33e4a',
-								'label'             => __( 'Button Link', NP_TEXT_DOMAIN ),
+								'label'             => __( 'Button Link', Base::TEXT_DOMAIN ),
 								'name'              => 'button_link',
 								'type'              => 'url',
 								'instructions'      => '',
@@ -618,10 +590,10 @@ class Wp {
 					),
 					array(
 						'key'               => 'field_573178d746af9',
-						'label'             => __( 'Autoplay', NP_TEXT_DOMAIN ),
+						'label'             => __( 'Autoplay', Base::TEXT_DOMAIN ),
 						'name'              => 'autoplay',
 						'type'              => 'number',
-						'instructions'      => __( 'In millisecond. Default 0 (not sliding on start).', NP_TEXT_DOMAIN ),
+						'instructions'      => __( 'In millisecond. Default 0 (not sliding on start).', Base::TEXT_DOMAIN ),
 						'required'          => 0,
 						'conditional_logic' => array(
 							array(
@@ -649,10 +621,10 @@ class Wp {
 					),
 					array(
 						'key'               => 'field_573178fb46afa',
-						'label'             => __( 'Transition', NP_TEXT_DOMAIN ),
+						'label'             => __( 'Transition', Base::TEXT_DOMAIN ),
 						'name'              => 'transition',
 						'type'              => 'number',
-						'instructions'      => __( 'Speed in millisecond when slider rotating.', NP_TEXT_DOMAIN ),
+						'instructions'      => __( 'Speed in millisecond when slider rotating.', Base::TEXT_DOMAIN ),
 						'required'          => 0,
 						'conditional_logic' => array(
 							array(
@@ -697,7 +669,6 @@ class Wp {
 				'active'                => 1,
 				'description'           => '',
 			) );
-
 		endif;
 	}
 
@@ -728,7 +699,6 @@ class Wp {
 			);
 			NpWp::getBlock( 'common/_main-slider', $args );
 		}
-
 	}
 
 	/**
@@ -765,9 +735,8 @@ class Wp {
 	 */
 	public static function getArchives( $postType = 'post', $format = 'month', $timeFormat = 'Y-m-d H:i:s', $type = 'link' ) {
 		global $wpdb;
-		$year_query = get_query_var( 'year' );
-		$mont_query = get_query_var( 'monthnum' );
-
+		$year_query  = get_query_var( 'year' );
+		$mont_query  = get_query_var( 'monthnum' );
 		$query       = "
             SELECT YEAR(post_date) AS `year`, count(ID) as posts , MONTH(post_date) as `month`
             FROM $wpdb->posts
@@ -828,67 +797,5 @@ class Wp {
 		parse_str( parse_url( $youtubeUrl, PHP_URL_QUERY ), $arrayResult );
 
 		return $arrayResult['v'];
-	}
-
-	public static function addRoleSiteAdmin() {
-		add_role( 'site_admin', __(
-			'Site Admin', NP_TEXT_DOMAIN ),
-			array(
-				'activate_plugins'       => false,
-				'create_users'           => true,
-				'delete_others_pages'    => true,
-				'delete_others_posts'    => true,
-				'delete_pages'           => true,
-				'delete_plugins'         => false,
-				'delete_posts'           => true,
-				'delete_private_pages'   => true,
-				'delete_private_posts'   => true,
-				'delete_published_pages' => true,
-				'delete_published_posts' => true,
-				'delete_themes'          => false,
-				'delete_users'           => true,
-				'edit_dashboard'         => true,
-				'edit_others_pages'      => true,
-				'edit_others_posts'      => true,
-				'edit_pages'             => true,
-				'edit_plugins'           => false,
-				'edit_posts'             => true,
-				'edit_private_pages'     => true,
-				'edit_private_posts'     => true,
-				'edit_published_pages'   => true,
-				'edit_published_posts'   => true,
-				'edit_theme_options'     => true,
-				'edit_themes'            => false,
-				'edit_users'             => true,
-				'export'                 => true,
-				'import'                 => true,
-				'install_plugins'        => false,
-				'install_themes'         => false,
-				'list_users'             => true,
-				'manage_categories'      => true,
-				'manage_links'           => true,
-				'manage_options'         => true,
-				'moderate_comments'      => true,
-				'promote_users'          => true,
-				'publish_pages'          => true,
-				'publish_posts'          => true,
-				'read'                   => true,
-				'read_private_pages'     => true,
-				'read_private_posts'     => true,
-				'remove_users'           => true,
-				'switch_themes'          => true,
-				'unfiltered_html'        => true,
-				'unfiltered_upload'      => true,
-				'update_core'            => false,
-				'update_plugins'         => false,
-				'update_themes'          => false,
-				'upload_files'           => true,
-				'copy_posts'             => true,
-				'create_posts'           => true,
-				'publish_s'              => true,
-				'read_private_s'         => true,
-				'wpseo_bulk_edit'        => true,
-			)
-		);
 	}
 }

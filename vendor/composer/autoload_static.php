@@ -4,26 +4,16 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitef6a9e06a1ee867161119d911f27e8a0
+class ComposerStaticInitde2fa661dbc648b1ef0d9c1a986f0986
 {
     public static $prefixLengthsPsr4 = array (
         'E' => 
         array (
-            'Enpii\\WpEnpiiCore\\Components\\' => 29,
-            'Enpii\\WpEnpiiCore\\Base\\' => 23,
             'Enpii\\WpEnpiiCore\\' => 18,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Enpii\\WpEnpiiCore\\Components\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/src/components',
-        ),
-        'Enpii\\WpEnpiiCore\\Base\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/src/base',
-        ),
         'Enpii\\WpEnpiiCore\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
@@ -33,8 +23,8 @@ class ComposerStaticInitef6a9e06a1ee867161119d911f27e8a0
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitef6a9e06a1ee867161119d911f27e8a0::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitef6a9e06a1ee867161119d911f27e8a0::$prefixDirsPsr4;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitde2fa661dbc648b1ef0d9c1a986f0986::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitde2fa661dbc648b1ef0d9c1a986f0986::$prefixDirsPsr4;
 
         }, null, ClassLoader::class);
     }

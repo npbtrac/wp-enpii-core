@@ -6,7 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Enpii\\WpEnpiiCore\\Components\\' => array($baseDir . '/src/components'),
-    'Enpii\\WpEnpiiCore\\Base\\' => array($baseDir . '/src/base'),
     'Enpii\\WpEnpiiCore\\' => array($baseDir . '/src'),
 );

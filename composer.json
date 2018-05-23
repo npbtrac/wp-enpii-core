@@ -13,9 +13,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Enpii\\WpEnpiiCore\\": "src",
-      "Enpii\\WpEnpiiCore\\Base\\": "src/base",
-      "Enpii\\WpEnpiiCore\\Components\\": "src/components"
+      "Enpii\\WpEnpiiCore\\": "src"
     }
   },
   "minimum-stability": "stable"
