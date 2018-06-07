@@ -238,6 +238,11 @@ class Wp {
 		wp_enqueue_script( 'bxslider', $use_cdn ? 'https://cdnjs.cloudflare.com/ajax/libs/bxslider/4.2.15/jquery.bxslider.min.js' : NP_ASSETS_URL . '/bxslider-4/dist/jquery.bxslider.min.js', ['jquery'], NP_PLUGIN_CORE_VER, true );
 	}
 
+    public static function load_detectizr( $use_cdn = false ) {
+        wp_enqueue_script( 'modernizr','https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js', [], NP_PLUGIN_CORE_VER, 'all' );
+        wp_enqueue_script( 'detectizr','https://cdnjs.cloudflare.com/ajax/libs/detectizr/2.2.0/detectizr.min.js', ['modernizr'], NP_PLUGIN_CORE_VER, 'all' );
+    }
+
 	public static function registerMainSlider( $args = array() ) {
 		$args      = array();
 		$subFields = array();
